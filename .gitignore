@@ -1,0 +1,10 @@
+*.csv
+*.zip
+./input/*
+*__pycache__*
+*ipynb_checkpoints*
+*.pth*
+*.jpg
+*.log
+*.jpg
+.vscode/settings.json
