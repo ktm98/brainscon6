@@ -1,0 +1,1 @@
+python -m torch.distributed.launch --nproc_per_node=5 main_dino.py --arch vit_small_patch16_256 --batch_size_per_gpu 40 --epochs 1000 --patch_size 16 --data_path ../input/SDNET2018/ --output_dir ../output_dino_vit_small_patch16_256_
