@@ -58,7 +58,7 @@ def make_folds(df, shuffle=True, random_state=None):
             fold_index[fold].append(_df.loc[_df['location_id']==location_id].index.tolist())
             
         fold_counts += num_labels_in_folds
-#         print('num: ', fold_counts)
+
             
 
     df['fold'] = -1

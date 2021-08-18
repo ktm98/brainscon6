@@ -50,6 +50,7 @@ from torch.cuda.amp import autocast, GradScaler
 
 # import lightly
 
+
 from scr.preprocess import preprocess
 from scr.make_folds import make_folds
 from scr.optimizer import Ranger, SAM
@@ -271,15 +272,6 @@ def train_loop(folds, fold, cfg):
 
     train_target = train_folds[cfg['target']].values.astype(np.float32)
     valid_target = valid_folds[cfg['target']].values.astype(np.float32)
-
-
-
-
-
-
-    # target_type = np.int32 if CFG.criterion == 'CrossEntropyLoss' else np.float32
-
-
 
     train_dataset = ImageDataset(train_folds['image'].values, train_target, 
                                  transform=get_transforms(data='train', cfg=cfg))

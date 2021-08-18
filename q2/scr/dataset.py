@@ -44,66 +44,6 @@ class ImageDataset(Dataset):
             else:
                 return image, label
 
-# class SegmentationDataset(Dataset):
-
-#     CLASSES = ['background', 'p_con']
-
-#     def __init__(self, image_file_names, mask_file_names=None, classes=None, transform=None, return_dict=False, preprocess=None):
-#         """
-#         Args:
-#             file_names
-#             labels
-#             transform
-#             return_dict  (bool): if True, __getitem__ returns dict type, else, returns tuple
-#         """
-#         self.image_file_names = image_file_names
-#         self.mask_file_names = mask_file_names
-#         self.class_values = [self.CLASSES.index(cls.lower()) for cls in classes]
-
-#         self.transform = transform
-#         self.preprocess = preprocess
-#         self.return_dict = return_dict
-        
-#     def __len__(self):
-#         return len(self.image_file_names)
-
-#     def __getitem__(self, idx):
-#         file_path = self.image_file_names[idx]
-
-#         image = get_image(file_path)
-#         if self.mask_file_names is not None:
-#             mask_file_path = self.mask_file_names[idx]
-#             mask = cv2.imread(mask_file_path, 0)
-#             masks = [(mask == v) for v in self.class_values]
-#             mask = np.stack(masks, axis=-1).astype('float')
-
-
-#         else:
-#             mask = None
-
-        
-#         if self.transform:
-#             transformed = self.transform(image=image, mask=mask)
-#             image = transformed['image']
-#             mask = transformed['mask']
-
-#         if self.preprocess:
-#             preprocessed = self.preprocess(image=image, mask=mask)
-#             image = preprocessed['image']
-#             mask = preprocessed['mask']
-
-#         if mask is None:
-#             if self.return_dict:
-#                 return {'image': image}
-#             else:
-#                 return image
-            
-#         else:
-
-#             if self.return_dict:
-#                 return {'image': image, 'mask': mask}
-#             else:
-#                 return image, mask
     
 class SegmentationDataset(Dataset):
 
@@ -243,15 +183,10 @@ class ConcatImageDataset(Dataset):
                 preprocessed = self.preprocess(image=image)
                 image = preprocessed['image']
 
-            # if self.labels is not None:
-            #     labels = self.labels[idx]
+
             if self.return_dict:
-                # if self.labels is not None:
-                    # return {'image': image, 'label': labels}
-                # else:
+
                 return {'image': image}
             else:
-                # if self.labels is not None:
-                    # return image, labels
-                # else:
+
                 return image 

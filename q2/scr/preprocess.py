@@ -45,6 +45,7 @@ def map_location(location):
         else:
             return 3
 
+
 def preprocess_df(df):
     df['base_image'] = df['id'].apply(lambda x: int(x.split('/')[2][:4]))
     df['location'] = df['id'].apply(lambda x: int(re.search(r'\d{4}-\d{1,3}', x).group()[5:]))

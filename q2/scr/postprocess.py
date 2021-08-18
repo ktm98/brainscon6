@@ -50,22 +50,9 @@ def get_preds_and_image(df, base_image):
         if '_' in path[-8:-4]:
             continue
             
-        # masks_ = []
-        # for exp in exps:
-        #     mask_path = row[f'{exp}_mask']
-        #     msk = cv2.imread(mask_path)[:, :, ::-1]
-        #     masks_.append(msk)
-#         if None in masks_:
-#             continue
-        # mask = np.mean(masks_, axis=0)
-#         mask = cv2.imread(mask_path)[:, :, ::-1]
+
         img = cv2.imread(path)[:, :, ::-1]
-        # if row['train'] == 0:
-        #     img[:, :, 2] = 255
-        # elif row['label'] == 1:
-        #     img[:, :, 1] = 255
-#         if row['preds'] == 1 :
-#             img[:, :, 0] = 255
+
         images[loc - 1] = img
         # masks[loc - 1] = mask
         idxs[loc - 1] = row['id']
@@ -74,12 +61,7 @@ def get_preds_and_image(df, base_image):
     # masks = np.array(masks).reshape(14, 18, 256, 256, 3)
     images = concat_tile(images)
     # masks = concat_tile(masks)
-#     fig = plt.figure(figsize=(9, 4))
-#     axes = fig.subplots(1, 2)
-#     axes[0].imshow(images)
-#     axes[1].imshow(masks)
-# #     plt.imshow(images)
-#     plt.show()
+
     preds = preds.reshape(14, 18)
     return idxs, preds, images
 
@@ -95,16 +77,7 @@ def post_process(preds, images, thresh=50, iterations=5, count_thresh=200):
     assert images.dtype == np.uint8
     masks = np.zeros_like(images)
     # 
-#     neighborhood = np.array([[0, 1, 0],
-#                              [1, 1, 1],
-#                              [0, 1, 0]], dtype=np.uint8)
-#     masks = cv2.erode(masks, neighborhood, iterations=iterations)
-#     masks = cv2.dilate(masks, neighborhood, iterations=iterations)
-    
-    # masks = morphology.remove_small_objects(masks, min_size=20)
-    # masks = morphology.remove_small_holes(masks, area_threshold=20)
-        
-    # masks = masks.astype(np.uint8)
+
     
     contours, hierarchy = cv2.findContours(preds, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     
@@ -169,61 +142,10 @@ def post_process(preds, images, thresh=50, iterations=5, count_thresh=200):
                 masks[256*cy:256*cy+256*height, 256*cx:256*cx+256*width] = msk 
 
 
-#         if area < 40:
-#             masks = cv2.drawContours(masks, [box], -1 ,(0, 0, 0), -1)
-        # if area > 256*256*4:
-        #     masks = cv2.drawContours(masks, [box], -1 ,(0,0,0), -1)
-        # if rate < 1/2 or rate > 2:
-        #     masks = cv2.drawContours(masks, [box], -1 ,(0,0, 0), -1)
-            
-    
-    
-#     mask = mask.reshape(mask.shape[0], mask.shape[1])
-    # height, width = masks.shape[0], masks.shape[1]
-    #     patch = mask.reshape(height//14, 14, width//18, 18).swapaxes(1, 2).reshape(-1, height//14, width//18)
-    # patch = view_as_blocks(masks, (height//14, width//18)).reshape(-1, height//14, width//18)
-    
-    
-    # count_masks = patch.sum(axis=(1, 2))
-    
-    # pred = np.zeros(252)
-    
-    # pred[count_masks>count_thresh] = 1
-    # pred = pred.reshape(14, 18)
-    
-    # post process
-#     contours, hierarchy = cv2.findContours(pred.astype(np.uint8), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-#     for cont in contours:
-# #             box = np.int0(cv2.boxPoints(rect))
-#         x, y, w, h = cv2.boundingRect(cont)
-#         area = w*h
-# #             (cx, cy), (width, height), angle = rect
-
-#         if area > 4:
-#             pred[y:y+h, x:x+w] = 0
-#         elif w/h >2 or w/h < 1/2:
-#             pred[y:y+h, x:x+w] = 0
     return preds, masks
 
 def main(exp):
-#     train_df = pd.read_csv('../input/Q2/train_label.csv', names=['id', 'label'])
-#     test_df = pd.read_csv('../input/Q2/sample_submission.csv', names=['id', 'label'])
 
-#     IMAGE_DIR = '../input/SDNET2018/'
-#     train_df['image'] = train_df['id'].apply(lambda x: IMAGE_DIR + x)
-#     test_df['image'] = test_df['id'].apply(lambda x: IMAGE_DIR + x)
-
-# #     train_df['seg_image'] = train_df['id'].apply(lambda x: '../input/train_patch_256/train_patch_256/W/' + x.split('/')[-1][:-3] + 'png')
-# #     train_df['seg_mask'] = train_df['id'].apply(lambda x: '../input/train_patch_256/train_patch_256/W_masks/' + x.split('/')[-1][:-3] + 'png')
-
-#     train_df, test_df = preprocess(train_df, test_df)
-
-# #     train_df['seg_mask_pred'] = train_df['id'].apply(lambda x: EXP_DIR + 'mask_pred/' + x.split('/')[-1][:-3] + '.png')
-# #     test_df['seg_mask_pred'] = test_df['id'].apply(lambda x: EXP_DIR + 'mask_pred/' + x.split('/')[-1][:-3] + '.png')
-
-#     data_df = pd.concat([train_df, test_df])
-#     for exp in exps:
-#         data_df[f'{exp}_mask'] = data_df['id'].apply(lambda x: '../q2/exp/' + exp + '/mask_pred/' + x.split('/')[-1][:-3] + '.png')
     train_df = pd.read_csv(f'./exp/{exp}/oof_df.csv')
     test_df = pd.read_csv(f'./exp/{exp}/test_df.csv')
     data_df = pd.concat([train_df, test_df])

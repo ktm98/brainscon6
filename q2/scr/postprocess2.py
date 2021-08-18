@@ -117,24 +117,7 @@ def post_process(preds, images, probs, thresh=50, iterations=5, count_thresh=200
     return preds, masks, probs
 
 def main(exp):
-#     train_df = pd.read_csv('../input/Q2/train_label.csv', names=['id', 'label'])
-#     test_df = pd.read_csv('../input/Q2/sample_submission.csv', names=['id', 'label'])
 
-#     IMAGE_DIR = '../input/SDNET2018/'
-#     train_df['image'] = train_df['id'].apply(lambda x: IMAGE_DIR + x)
-#     test_df['image'] = test_df['id'].apply(lambda x: IMAGE_DIR + x)
-
-# #     train_df['seg_image'] = train_df['id'].apply(lambda x: '../input/train_patch_256/train_patch_256/W/' + x.split('/')[-1][:-3] + 'png')
-# #     train_df['seg_mask'] = train_df['id'].apply(lambda x: '../input/train_patch_256/train_patch_256/W_masks/' + x.split('/')[-1][:-3] + 'png')
-
-#     train_df, test_df = preprocess(train_df, test_df)
-
-# #     train_df['seg_mask_pred'] = train_df['id'].apply(lambda x: EXP_DIR + 'mask_pred/' + x.split('/')[-1][:-3] + '.png')
-# #     test_df['seg_mask_pred'] = test_df['id'].apply(lambda x: EXP_DIR + 'mask_pred/' + x.split('/')[-1][:-3] + '.png')
-
-#     data_df = pd.concat([train_df, test_df])
-#     for exp in exps:
-#         data_df[f'{exp}_mask'] = data_df['id'].apply(lambda x: '../q2/exp/' + exp + '/mask_pred/' + x.split('/')[-1][:-3] + '.png')
     train_df = pd.read_csv(f'./exp/{exp}/oof_df.csv')
     train_df = train_df.loc[train_df['fold']>=0].reset_index()
     test_df = pd.read_csv(f'./exp/{exp}/test_df.csv')
@@ -176,13 +159,9 @@ def main(exp):
     # print(new_df['id'].values.shape)
     new_df = new_df.dropna(subset=['id'])
     
-    # _df = data_df.merge(new_df, on='id', how='left')
+
     _df = pd.merge(data_df, new_df, on='id', how='left')
-    # _df = pd.concat([data_df.reset_index(drop=True), new_df.reindex(data_df['id'].values).reset_index(drop=True)], axis=1)
-    # print(new_df)
-    # print(data_df)
-    # print(_df)
-    # print((set(data_df['id'].values.tolist()) & set(idxs)).__len__())
+
 
     # _df['pred'] = _df['pred'].fillna(0)
     _df['probs_'] = _df['probs_'].fillna(0)
@@ -201,11 +180,11 @@ def main(exp):
  
 
     OUTPUT_DIR = f'./exp/{exp}/'
-    _df.loc[_df['train']==1].to_csv(OUTPUT_DIR + 'oof_df_pp2___.csv', index=False)
+    _df.loc[_df['train']==1].to_csv(OUTPUT_DIR + 'oof_df_pp2.csv', index=False)
 
-    _df.loc[_df['train']==0, ['id', 'preds_']].to_csv(OUTPUT_DIR + 'submission_pp2___.csv', index=False, header=None)
+    _df.loc[_df['train']==0, ['id', 'preds_']].to_csv(OUTPUT_DIR + 'submission_pp2.csv', index=False, header=None)
 
-    _df.loc[_df['train']==0].to_csv(OUTPUT_DIR + 'test_df_pp2___.csv', index=False)
+    _df.loc[_df['train']==0].to_csv(OUTPUT_DIR + 'test_df_pp2.csv', index=False)
 
     
    

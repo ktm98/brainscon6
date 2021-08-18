@@ -39,6 +39,7 @@ def get_segmentation_transforms(cfg, data):
 
     return ret
 
+
 def segmentation_preprocess(cfg, data):
     # mean = cfg['augmentation']['transform'][data]['Normalize']['mean']
     # std = cfg['augmentation']['transform'][data]['Normalize']['std']

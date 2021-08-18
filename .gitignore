@@ -6,5 +6,4 @@
 *.pth*
 *.jpg
 *.log
-*.jpg
 .vscode/settings.json

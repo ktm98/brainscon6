@@ -106,6 +106,7 @@ def inference(model, states, test_loader, device):
     return probs
 
 
+
 if __name__ == '__main__':
 
     def get_result(result_df):
