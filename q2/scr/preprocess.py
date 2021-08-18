@@ -19,7 +19,7 @@ from PIL import Image
 import glob
 import re
 
-from sklearn.model_selection import StratifiedKFold, StratifiedGroupKFold
+from sklearn.model_selection import StratifiedKFold
 
 import warnings 
 warnings.filterwarnings('ignore')
